@@ -2,7 +2,6 @@ package com.Sprinboot.VehicleRental.services;
 
 import com.Sprinboot.VehicleRental.entity.Customer;
 import com.Sprinboot.VehicleRental.repo.CustomerRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,15 +24,31 @@ public class CustomerService {
         return customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
     }
+    public Customer updateCustomer(Long id,Customer customer){
+        Customer existingCustomer=customerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer id not found"));
+        existingCustomer.setName(customer.getName());
+        existingCustomer.setEmail(customer.getEmail());
+        existingCustomer.setPhoneNumber(customer.getPhoneNumber());
+
+        return customerRepository.save(existingCustomer);
+    }
+
+    public void deleteCustomerById(Long id) {
+
+        if (!customerRepository.existsById(id)) {
+            throw new RuntimeException("Customer not found");
+        }
+
+        customerRepository.deleteById(id);
+    }
 }
 
-public Customer updateCustomer(Long id){
-    return CustomerRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Customer id not found"));
-}
 
 
 
 
 
-}
+
+
+
